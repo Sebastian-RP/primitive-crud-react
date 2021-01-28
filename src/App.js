@@ -24,11 +24,11 @@ state= {
   modalInsertar: false,
 }
 
-handleChange = (e) => {
+handleChange =e=> {
   this.setState({
-    form:{...this.state,
-    [e.target.name]: e.target.value
-    }, 
+    form:{...this.state.form,
+    [e.target.name]: e.target.value,
+    }
   })
 }
 
@@ -40,11 +40,19 @@ ocultarModalInsertar = () => {
   this.setState({modalInsertar: false})
 }
 
+insertar=()=>{
+  var valorNuevo={...this.state.form}
+  valorNuevo.id = this.state.data.length+1;
+  var lista = this.state.data;
+  lista.push(valorNuevo);
+  this.setState({data: lista, modalInsertar: false});
+}
+
   render(){
     return(
       <>
       <Container>
-      <Button color='success' onClick={()=>this.mostrarModalInsertar}>Insertar nuevo personaje</Button>
+      <Button color='success' onClick={()=>{this.mostrarModalInsertar()}}>Insertar nuevo personaje</Button>
       <br></br>
       
       <Table>
@@ -68,7 +76,7 @@ ocultarModalInsertar = () => {
       </Table>
       </Container>
 
-      <Modal isOpen={this.state.modalInsertar}>
+      <Modal isOpen={this.state.modalInsertar} modalTransition={{ timeout: 400 }} backdropTransition={{ timeout: 100 }}>
         <ModalHeader>
           <div>
             <h3>Insertar registro</h3>
@@ -79,22 +87,22 @@ ocultarModalInsertar = () => {
 
           <FormGroup>
             <label>Id:</label>
-            <input className="form-control" readOnly type="text" value={this.state.data.length+1}></input>
+            <input className="form-control" readOnly type="text" value={this.state.data.length+1}/>
           </FormGroup>
 
           <FormGroup>
             <label>Personaje:</label>
-            <input className="form-control" name="personaje" type="text" onChange={this.handleChange}></input>
+            <input className="form-control" name="personaje" type="text" onChange={this.handleChange}/>
           </FormGroup>
 
           <FormGroup>
             <label>Anime:</label>
-            <input className="form-control" name="anime" type="text"></input>
+            <input className="form-control" name="anime" type="text" onChange={this.handleChange}/>
           </FormGroup>
         </ModalBody>
 
         <ModalFooter>
-          <Button color="primary">Insertar</Button>
+          <Button color="primary" onClick={()=>this.insertar()}>Insertar</Button>
           <Button color="danger" onClick={()=>{this.ocultarModalInsertar()}}>Cancelar</Button>
         </ModalFooter>
       </Modal>
